@@ -75,7 +75,7 @@ export default class RouterService {
                     channel: basicAcars.channel,
                     icao: basicAcars.icao || '000000'
                 }).inc()
-            this.websocketService.send('data', basicAcars);
+            this.websocketService.send(basicAcars.type, basicAcars);
         }
     }
 
