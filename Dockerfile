@@ -9,4 +9,5 @@ FROM node:lts-alpine AS aviator
 
 WORKDIR /aviator
 COPY --from=build /build/dist/* .
+COPY --from=build /build/node_modules .
 COPY router-config.json .
