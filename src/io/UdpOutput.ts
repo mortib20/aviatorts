@@ -19,6 +19,7 @@ export default class UdpOutput implements IOutput {
     private setupEvents() {
         this.socket.on('connect', () => { this.logger.info('Connected'); this._status.connected = true; });
         this.socket.on('error', (error) => {
+            this.logger.error(error);
             this._status.connected = false;
             this.socket.removeAllListeners();
             this.socket = dgram.createSocket('udp4');
