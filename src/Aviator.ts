@@ -34,8 +34,8 @@ export default class Aviator {
     }
 
     private static async setupExpress() {
-        Logger.log('Express starting on :21001');
-        this._express.listen(21001);
+        Logger.log('HTTP starting on :21001');
+        this.http.listen(21001);
         this._express.use((req, res) => {
             res.status(404).end();
         })
