@@ -1,0 +1,38 @@
+{
+  "vdl2": [
+    {
+      "protocol": "udp",
+      "address": "feed.airframes.io",
+      "port": 5552
+    }
+  ],
+  "hfdl": [
+    {
+      "protocol": "tcp",
+      "address": "feed.airframes.io",
+      "port": 5556
+    }
+  ],
+  "acars": [
+    {
+      "protocol": "udp",
+      "address": "feed.airframes.io",
+      "port": 5550
+    }
+  ],
+  "aero": [
+    {
+      "protocol": "udp",
+      "address": "feed.airframes.io",
+      "port": 5571
+    }
+  ],
+  "iridium": [],
+  "readsb": [
+    {
+      "protocol": "tcp",
+      "address": "192.168.168.3",
+      "port": 30031
+    }
+  ]
+}
