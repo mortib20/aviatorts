@@ -9,8 +9,10 @@ FROM node:lts-alpine AS aviator
 
 WORKDIR /aviator
 COPY --from=build /build/dist/ /aviator
-COPY --from=build /build/node_modules ./node_modules
+COPY package.json /aviator
 COPY router-config.json .
+
+RUN npm install --omit=dev
 
 EXPOSE 21000 # Input
 EXPOSE 21001 # Webserver
