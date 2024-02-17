@@ -5,12 +5,14 @@ import IOutput, {OutputStatus} from './IOutput';
 
 export default class UdpOutput implements IOutput {
     private readonly _status: OutputStatus;
+    private socket: dgram.Socket;
 
-    private constructor(private endpoint: EndpointConfig, private socket: dgram.Socket, private logger: Logger) {
+    private constructor(private endpoint: EndpointConfig, private logger: Logger) {
         this._status = {
             endpoint: endpoint,
             connected: null
         };
+        this.socket = dgram.createSocket('udp4');
         this.socket.connect(endpoint.port, endpoint.address);
         this.setupEvents();
         this.logger.info('Starting')
@@ -37,6 +39,6 @@ export default class UdpOutput implements IOutput {
     }
 
     public static create(endpoint: EndpointConfig) {
-        return new UdpOutput(endpoint, dgram.createSocket('udp4'), Logger.create(`${this.name}:${endpoint.address}:${endpoint.port}`));
+        return new UdpOutput(endpoint, Logger.create(`${this.name}:${endpoint.address}:${endpoint.port}`));
     }
 }

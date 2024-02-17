@@ -3,13 +3,15 @@ import Logger from '../utils/Logger';
 import RouterOutputService from './RouterOutputService';
 import {Express} from 'express';
 import RouterConfigService from './RouterConfigService';
+import MetricsService from '../MetricsService';
+import BasicAcars from '../acars/BasicAcars';
 
 export default class RouterService {
     private input = UdpInput.create(21000);
     private routerConfigService = RouterConfigService.create();
     private routerOutputService = RouterOutputService.create(this.routerConfigService);
 
-    private constructor(private express: Express, private logger: Logger) {
+    private constructor(private express: Express, private metricsService: MetricsService, private logger: Logger) {
         this.setupExpress();
     }
 
@@ -33,20 +35,45 @@ export default class RouterService {
 
     private handleMessage(data: Buffer) {
         const json = JSON.parse(data.toString());
+        let basicAcars: undefined | BasicAcars;
+
         if (RouterService.isDumpVdl2(json)) {
             this.routerOutputService.write('vdl2', data);
+            if (RouterService.isAcarsFrame(json)) {
+                basicAcars = BasicAcars.fromDumpVDL2(json);
+            }
         }
 
         if (RouterService.isDumpHfdl(json)) {
             this.routerOutputService.write('hfdl', data);
+            if (RouterService.isAcarsFrame(json)) {
+                basicAcars = BasicAcars.fromDumpHFDL(json);
+            }
         }
 
         if (RouterService.isAcarsdec(json)) {
             this.routerOutputService.write('acars', data);
+            if (RouterService.isAcarsFrame(json)) {
+                basicAcars = BasicAcars.fromAcarsdec(json);
+            }
         }
 
         if (RouterService.isJaero(json)) {
             this.routerOutputService.write('aero', data);
+            if (RouterService.isAcarsFrame(json)) {
+                basicAcars = BasicAcars.fromJaero(json);
+            }
+        }
+
+        if (basicAcars) {
+            this.metricsService
+                .receivedMessagesTotal
+                .labels({
+                    label: basicAcars.label,
+                    type: basicAcars.type,
+                    channel: basicAcars.channel,
+                    icao: basicAcars.icao || '000000'
+                }).inc()
         }
     }
 
@@ -76,7 +103,7 @@ export default class RouterService {
         return !!(json['vdl2']?.['avlc']?.['acars'] || json['hfdl']?.['lpdu']?.['hfnpdu']?.['acars'] || json['isu']?.['acars'] || json['text'])
     }
 
-    public static create(express: Express) {
-        return new RouterService(express, Logger.create('RouterService'));
+    public static create(express: Express, metricsService: MetricsService) {
+        return new RouterService(express, metricsService, Logger.create('RouterService'));
     }
 }
