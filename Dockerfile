@@ -14,7 +14,7 @@ COPY router-config.json .
 
 RUN npm install --omit=dev
 
-EXPOSE 21000 # Input
-EXPOSE 21001 # Webserver
+EXPOSE 21000
+EXPOSE 21001
 
 RUN node ./main.js
