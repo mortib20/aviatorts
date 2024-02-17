@@ -5,13 +5,14 @@ import {Express} from 'express';
 import RouterConfigService from './RouterConfigService';
 import MetricsService from '../MetricsService';
 import BasicAcars from '../acars/BasicAcars';
+import WebsocketService from '../WebsocketService';
 
 export default class RouterService {
     private input = UdpInput.create(21000);
     private routerConfigService = RouterConfigService.create();
     private routerOutputService = RouterOutputService.create(this.routerConfigService);
 
-    private constructor(private express: Express, private metricsService: MetricsService, private logger: Logger) {
+    private constructor(private express: Express, private websocketService: WebsocketService, private metricsService: MetricsService, private logger: Logger) {
         this.setupExpress();
     }
 
@@ -74,6 +75,7 @@ export default class RouterService {
                     channel: basicAcars.channel,
                     icao: basicAcars.icao || '000000'
                 }).inc()
+            this.websocketService.send('data', basicAcars);
         }
     }
 
@@ -103,7 +105,7 @@ export default class RouterService {
         return !!(json['vdl2']?.['avlc']?.['acars'] || json['hfdl']?.['lpdu']?.['hfnpdu']?.['acars'] || json['isu']?.['acars'] || json['text'])
     }
 
-    public static create(express: Express, metricsService: MetricsService) {
-        return new RouterService(express, metricsService, Logger.create('RouterService'));
+    public static create(express: Express, websocketService: WebsocketService, metricsService: MetricsService) {
+        return new RouterService(express, websocketService, metricsService, Logger.create('RouterService'));
     }
 }
