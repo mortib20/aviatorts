@@ -1,0 +1,11 @@
+FROM node:lts-alpine AS build
+
+WORKDIR /build
+COPY . .
+RUN npm run build
+
+FROM node:lts-alpine AS aviator
+
+WORKDIR /aviator
+COPY --from=build dist/* .
+COPY router-config.json .
