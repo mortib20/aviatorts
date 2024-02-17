@@ -17,4 +17,4 @@ RUN npm install --omit=dev
 EXPOSE 21000
 EXPOSE 21001
 
-RUN node ./main.js
+CMD ["node", "./main.js"]
