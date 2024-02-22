@@ -1,7 +1,7 @@
 import * as p from 'prom-client'
 import { Express } from "express";
 
-export default class MetricsService {
+export default class Metrics {
     private readonly registry: p.Registry = new p.Registry();
     public receivedMessagesTotal = new p.Counter({
         name: 'received_messages_total',
@@ -26,6 +26,6 @@ export default class MetricsService {
     }
 
     public static create(express: Express) {
-        return new MetricsService(express)
+        return new Metrics(express)
     }
 }

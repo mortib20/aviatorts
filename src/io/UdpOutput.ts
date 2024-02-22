@@ -13,8 +13,9 @@ export default class UdpOutput implements IOutput {
             connected: null
         };
         this.socket = dgram.createSocket('udp4');
-        this.socket.connect(endpoint.port, endpoint.address);
         this.setupEvents();
+        this.socket.connect(endpoint.port, endpoint.address);
+
         this.logger.info('Starting')
     }
 
@@ -25,8 +26,8 @@ export default class UdpOutput implements IOutput {
             this._status.connected = false;
             this.socket.removeAllListeners();
             this.socket = dgram.createSocket('udp4');
-            this.socket.connect(this.endpoint.port, this.endpoint.address);
             this.setupEvents();
+            this.socket.connect(this.endpoint.port, this.endpoint.address);
         });
     }
 

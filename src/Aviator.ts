@@ -3,27 +3,24 @@ import * as http from 'node:http';
 import RouterService from './router-service/RouterService';
 import compression from 'compression';
 import Logger from './utils/Logger';
-import MetricsService from './MetricsService';
-import WebsocketService from './WebsocketService';
+import Metrics from './Metrics';
+import Websocket from './Websocket';
+import HttpExpress from './HttpExpress'
 
 export default class Aviator {
-    private static http: http.Server;
-    private static _express: Express;
-    private static websocketService: WebsocketService;
+    private static httpExpress: HttpExpress;
+    private static websocket: Websocket;
     private static routerService: RouterService;
-    private static metricsService: MetricsService;
+    private static metrics: Metrics;
 
     public static async main(){
         await this.printSystemInfo();
 
-        this._express = express();
-        this.http = http.createServer(this._express);
-        this.websocketService = WebsocketService.create(this.http);
+        this.httpExpress = HttpExpress.create();
+        this.websocket = Websocket.create(this.httpExpress.http);
 
-        this.metricsService = MetricsService.create(this._express);
-        this.routerService = RouterService.create(this._express, this.websocketService, this.metricsService);
-
-        await this.setupExpress();
+        this.metrics = Metrics.create(this.httpExpress.express);
+        this.routerService = RouterService.create(this.httpExpress.express, this.websocket, this.metrics);
 
         this.routerService.start();
 
@@ -33,14 +30,7 @@ export default class Aviator {
         })
     }
 
-    private static async setupExpress() {
-        Logger.log('HTTP starting on :21001');
-        this.http.listen(21001);
-        this._express.use((req, res) => {
-            res.status(404).end();
-        })
-        this._express.use(compression());
-    }
+
 
     private static async printSystemInfo() {
         Logger.log('               _       _                   ');

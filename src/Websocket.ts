@@ -1,7 +1,7 @@
 import { Server } from 'socket.io'
 import * as http from 'node:http';
 
-export default class WebsocketService {
+export default class Websocket {
     private constructor(private readonly io: Server) {
     }
 
@@ -10,6 +10,6 @@ export default class WebsocketService {
     }
 
     public static create(http: http.Server) {
-        return new WebsocketService(new Server(http, { httpCompression: true }))
+        return new Websocket(new Server(http, { httpCompression: true }))
     }
 }
