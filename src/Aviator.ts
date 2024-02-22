@@ -1,7 +1,4 @@
-import express, { Express } from 'express';
-import * as http from 'node:http';
 import RouterService from './router-service/RouterService';
-import compression from 'compression';
 import Logger from './utils/Logger';
 import Metrics from './Metrics';
 import Websocket from './Websocket';
