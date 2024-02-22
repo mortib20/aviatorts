@@ -16,7 +16,7 @@ export default class Aviator {
     public static async main(){
         await this.printSystemInfo();
 
-        this.httpExpress = HttpExpress.create();
+        this.httpExpress = HttpExpress.create(21001);
         this.websocket = Websocket.create(this.httpExpress.http);
 
         this.metrics = Metrics.create(this.httpExpress.express);

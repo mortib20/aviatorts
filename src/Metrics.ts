@@ -1,9 +1,9 @@
-import * as p from 'prom-client'
+import * as prom from 'prom-client'
 import { Express } from "express";
 
 export default class Metrics {
-    private readonly registry: p.Registry = new p.Registry();
-    public receivedMessagesTotal = new p.Counter({
+    private readonly registry: prom.Registry = new prom.Registry();
+    public receivedMessagesTotal = new prom.Counter({
         name: 'received_messages_total',
         help: 'Total received messages',
         labelNames: ['label', 'flight_number', 'flight', 'icao', 'channel', 'type'],

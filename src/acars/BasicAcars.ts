@@ -7,7 +7,7 @@ export default class BasicAcars {
     constructor(public type: string, public channel: string, public receiver: string, public timestamp: number, public label: string, public text: string, public reg: string, public flight: string, public icao: string) {
     }
 
-    public static fromDumpVDL2(dumpvdl2: DumpVdl2): BasicAcars {
+    public static fromDumpVdl2(dumpvdl2: DumpVdl2): BasicAcars {
         const type = 'dumpvdl2'
         const freq = dumpvdl2.vdl2.freq.toString()
         const station = dumpvdl2.vdl2.station
@@ -21,7 +21,7 @@ export default class BasicAcars {
         return new BasicAcars(type, freq, station, timestamp, label, msg_text, reg, flight, addr)
     }
 
-    public static fromDumpHFDL(dumphfdl: DumpHfdl) {
+    public static fromDumpHfdl(dumphfdl: DumpHfdl) {
         const type = 'dumphfdl'
         const freq = dumphfdl.hfdl.freq.toString()
         const station = dumphfdl.hfdl.station

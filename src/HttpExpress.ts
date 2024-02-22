@@ -15,29 +15,29 @@ export default class HttpExpress {
         return this._express;
     }
 
-    private constructor(private logger: Logger) {
+    private constructor(port: number, private logger: Logger) {
         this._express = express();
         this._http = http.createServer(this._express);
         this.setupExpress();
-        this.setupHttp();
+        this.setupHttp(port);
     }
 
     private setupExpress() {
-        this._express.use((req, res) => res.status(404).end())
+        //this._express.use((req, res) => res.status(404).end())
         this._express.use(compression());
     }
 
-    private setupHttp() {
-        this._http.listen(21001);
+    private setupHttp(port: number) {
+        this._http.listen(port);
         this._http.on('listening', () => {
-            this.logger.info('HTTP starting on :21001');
+            this.logger.info(`Starting on :${port}`);
         })
         this._http.on('error', (error) => {
             this.logger.error(error);
         })
     }
 
-    public static create() {
-        return new HttpExpress(Logger.create(this.name));
+    public static create(port: number) {
+        return new HttpExpress(port, Logger.create(this.name));
     }
 }

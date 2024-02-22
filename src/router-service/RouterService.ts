@@ -6,6 +6,7 @@ import RouterConfigService from './RouterConfigService';
 import Metrics from '../Metrics';
 import BasicAcars from '../acars/BasicAcars';
 import Websocket from '../Websocket';
+import {AcarsType} from '../acars/AcarsType'
 
 export default class RouterService {
     private input = UdpInput.create(21000);
@@ -38,30 +39,30 @@ export default class RouterService {
         const json = JSON.parse(data.toString());
         let basicAcars: undefined | BasicAcars;
 
-        if (RouterService.isDumpVdl2(json)) {
+        if (AcarsType.isDumpVdl2(json)) {
             this.routerOutputService.write('vdl2', data);
-            if (RouterService.isAcarsFrame(json)) {
-                basicAcars = BasicAcars.fromDumpVDL2(json);
+            if (AcarsType.isAcarsFrame(json)) {
+                basicAcars = BasicAcars.fromDumpVdl2(json);
             }
         }
 
-        if (RouterService.isDumpHfdl(json)) {
+        if (AcarsType.isDumpHfdl(json)) {
             this.routerOutputService.write('hfdl', data);
-            if (RouterService.isAcarsFrame(json)) {
-                basicAcars = BasicAcars.fromDumpHFDL(json);
+            if (AcarsType.isAcarsFrame(json)) {
+                basicAcars = BasicAcars.fromDumpHfdl(json);
             }
         }
 
-        if (RouterService.isAcarsdec(json)) {
+        if (AcarsType.isAcarsdec(json)) {
             this.routerOutputService.write('acars', data);
-            if (RouterService.isAcarsFrame(json)) {
+            if (AcarsType.isAcarsFrame(json)) {
                 basicAcars = BasicAcars.fromAcarsdec(json);
             }
         }
 
-        if (RouterService.isJaero(json)) {
+        if (AcarsType.isJaero(json)) {
             this.routerOutputService.write('aero', data);
-            if (RouterService.isAcarsFrame(json)) {
+            if (AcarsType.isAcarsFrame(json)) {
                 basicAcars = BasicAcars.fromJaero(json);
             }
         }
@@ -82,27 +83,6 @@ export default class RouterService {
     public start() {
         this.logger.info('Starting');
         this.input.handleMessage((msg) => this.handleMessage(msg))
-    }
-
-    private static isDumpVdl2(json: any): boolean {
-        return json['vdl2']?.['app']?.['name'] === 'dumpvdl2'
-    }
-
-
-    private static isDumpHfdl(json: any): boolean {
-        return json['hfdl']?.['app']?.['name'] === 'dumphfdl'
-    }
-
-    private static isAcarsdec(json: any): boolean {
-        return json['app']?.['name'] === 'acarsdec'
-    }
-
-    private static isJaero(json: any): boolean {
-        return json['app']?.['name'] === 'JAERO'
-    }
-
-    private static isAcarsFrame(json: any): boolean {
-        return !!(json['vdl2']?.['avlc']?.['acars'] || json['hfdl']?.['lpdu']?.['hfnpdu']?.['acars'] || json['isu']?.['acars'] || json['text'])
     }
 
     public static create(express: Express, websocketService: Websocket, metricsService: Metrics) {
