@@ -11,7 +11,7 @@ export class AdsbRouterService {
 
     private setupEvent() {
         this.socket = new net.Socket();
-        this.socket.connect(30000, 'localhost');
+        this.socket.connect(30000, '127.0.0.1');
         this.socket.on('connect', () => this.logger.info('Connected'));
         this.socket.on('error', (error) => this.logger.error(error.message));
         this.socket.on('data', (msg) => {
