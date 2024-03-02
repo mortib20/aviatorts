@@ -15,7 +15,7 @@ export class AdsbRouterService {
         this.socket.on('connect', () => this.logger.info('Connected'));
         this.socket.on('error', (error) => this.logger.error(error.message));
         this.socket.on('data', (msg) => {
-            this.websocket.send('readsb', msg);
+            this.websocket.send('readsb', msg.toJSON());
         })
         this.socket.on('close', () => {
             setTimeout(() => {
