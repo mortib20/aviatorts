@@ -2,7 +2,7 @@ import UdpInput from '../io/UdpInput';
 import Logger from '../utils/Logger';
 import RouterOutputService from './RouterOutputService';
 import {Express} from 'express';
-import RouterConfigService from './RouterConfigService';
+import ConfigService from './ConfigService';
 import Metrics from '../Metrics';
 import BasicAcars from '../acars/BasicAcars';
 import Websocket from '../Websocket';
@@ -10,7 +10,7 @@ import {AcarsType} from '../acars/AcarsType'
 
 export default class RouterService {
     private input = UdpInput.create(21000);
-    private routerConfigService = RouterConfigService.create();
+    private routerConfigService = ConfigService.create();
     private routerOutputService = RouterOutputService.create(this.routerConfigService);
 
     private constructor(private express: Express, private websocketService: Websocket, private metricsService: Metrics, private logger: Logger) {

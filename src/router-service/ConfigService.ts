@@ -10,7 +10,7 @@ export type EndpointConfig = {
 
 export type RouterConfig = Map<string, EndpointConfig[]>;
 
-export default class RouterConfigService {
+export default class ConfigService {
     private readonly configName = 'router-config.json';
     private readonly configPath = path.join(process.cwd(), this.configName);
     private _currentConfig: RouterConfig;
@@ -43,6 +43,6 @@ export default class RouterConfigService {
     }
 
     public static create() {
-        return new RouterConfigService(Logger.create(this.name));
+        return new ConfigService(Logger.create(this.name));
     }
 }

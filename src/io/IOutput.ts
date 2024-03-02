@@ -1,4 +1,4 @@
-import {EndpointConfig} from '../router-service/RouterConfigService';
+import {EndpointConfig} from '../router-service/ConfigService';
 
 export type OutputStatus = {
     endpoint: EndpointConfig;

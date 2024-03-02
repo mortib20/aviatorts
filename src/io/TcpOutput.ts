@@ -1,5 +1,5 @@
 import Logger from '../utils/Logger';
-import {EndpointConfig} from '../router-service/RouterConfigService';
+import {EndpointConfig} from '../router-service/ConfigService';
 import * as net from 'node:net';
 import IOutput, {OutputStatus} from './IOutput';
 

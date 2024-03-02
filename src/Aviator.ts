@@ -3,10 +3,12 @@ import Logger from './utils/Logger';
 import Metrics from './Metrics';
 import Websocket from './Websocket';
 import HttpExpress from './HttpExpress'
+import {AdsbRouterService} from './adsb-router-service/AdsbRouterService';
 
 export default class Aviator {
     private static httpExpress: HttpExpress;
     private static websocket: Websocket;
+    private static adsbRouterService: AdsbRouterService;
     private static routerService: RouterService;
     private static metrics: Metrics;
 
@@ -17,6 +19,7 @@ export default class Aviator {
         this.websocket = Websocket.create(this.httpExpress.http);
 
         this.metrics = Metrics.create(this.httpExpress.express);
+        this.adsbRouterService = AdsbRouterService.create(this.websocket);
         this.routerService = RouterService.create(this.httpExpress.express, this.websocket, this.metrics);
 
         this.routerService.start();

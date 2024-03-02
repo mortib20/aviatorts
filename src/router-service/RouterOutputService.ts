@@ -1,6 +1,6 @@
 import Logger from '../utils/Logger';
 import UdpOutput from '../io/UdpOutput';
-import RouterConfigService, {RouterConfig} from './RouterConfigService';
+import ConfigService, {RouterConfig} from './ConfigService';
 import TcpOutput from '../io/TcpOutput';
 import IOutput from '../io/IOutput';
 
@@ -9,7 +9,7 @@ export type Outputs = Map<string, IOutput[]>;
 export default class RouterOutputService {
     private outputs: Outputs;
 
-    private constructor(routerConfigService: RouterConfigService, private logger: Logger) {
+    private constructor(routerConfigService: ConfigService, private logger: Logger) {
         this.outputs = this.routerConfigToOutputs(routerConfigService.currentConfig);
     }
 
@@ -33,7 +33,7 @@ export default class RouterOutputService {
         this.outputs.get(type)?.forEach(o => o.send(data));
     }
 
-    public static create(routerConfigService: RouterConfigService,) {
+    public static create(routerConfigService: ConfigService,) {
         return new RouterOutputService(routerConfigService, Logger.create(this.name));
     }
 }

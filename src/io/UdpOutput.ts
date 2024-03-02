@@ -1,6 +1,6 @@
 import Logger from '../utils/Logger';
 import * as dgram from 'node:dgram';
-import {EndpointConfig} from '../router-service/RouterConfigService';
+import {EndpointConfig} from '../router-service/ConfigService';
 import IOutput, {OutputStatus} from './IOutput';
 
 export default class UdpOutput implements IOutput {
